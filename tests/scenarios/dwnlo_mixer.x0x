@@ -1,0 +1,12 @@
+# DWNLO mixer: confirms PARTS/909 MIX/808 MIX pages pick up the current part roster
+# (909, 808, 303A, M808, BLIP) and their colours, with no stale BREAK/303B labels.
+wait 2000
+tap LFO
+expect view 4
+shot dwnlo_mix_parts.png
+tap LFO
+shot dwnlo_mix_909.png
+tap LFO
+shot dwnlo_mix_808.png
+tap LFO
+shot dwnlo_mix_master.png

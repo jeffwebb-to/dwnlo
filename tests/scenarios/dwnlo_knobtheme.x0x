@@ -1,0 +1,28 @@
+# DWNLO: screenshot each part's EDIT/knob page to check its colour theme.
+# 909 and 808 are drums, so EDIT first needs a track picked (black key 1 = BD).
+wait 2000
+expect part 0
+tapkey b0
+tap EDIT
+shot dwnlo_knob_909.png
+tap EDIT
+turn ALGO 1
+expect part 1
+tapkey b0
+tap EDIT
+shot dwnlo_knob_808.png
+tap EDIT
+turn ALGO 1
+expect part 2
+tap EDIT
+shot dwnlo_knob_303a.png
+tap EDIT
+turn ALGO 1
+expect part 3
+tap EDIT
+shot dwnlo_knob_m808.png
+tap EDIT
+turn ALGO 1
+expect part 4
+tap EDIT
+shot dwnlo_knob_blip.png

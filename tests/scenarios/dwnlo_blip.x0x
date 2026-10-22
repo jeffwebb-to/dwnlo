@@ -1,0 +1,24 @@
+# DWNLO: blip in BREAK's old slot (part 4). A normal boot (no debug override), select it,
+# write a few fast steps to exercise the hard-retriggered envelope and the always-on
+# portamento (GLIDE), confirm it renders audibly without clipping, then screenshot both
+# knob pages: SOUND (Tune, Decay, Bright, Glide) and LFO (LRate, LDepth, Cutoff).
+wait 2200
+turn ALGO 4
+expect part 4
+tap SEQ
+tapkey w0
+expect gate2.0 1
+tapkey w2
+tapkey w4
+tapkey w6
+tap PLAY
+wait 400
+peakreset
+wait 600
+expect peak_db_max -0.1
+expect peak_db_min -50
+tap PLAY
+tap EDIT
+shot dwnlo_blip_sound.png
+turn SELECT 1
+shot dwnlo_blip_lfo.png

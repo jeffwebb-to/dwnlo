@@ -1,0 +1,5 @@
+# DWNLO's boot splash (firmware/src/dwnlo_splash.c): the debug `splash` command re-runs the real
+# draw on demand and shoots it. This only checks it draws without crashing; it is not a pixel
+# check. See dwnlo_boot_hold.x0x for the real boot path's hold/handoff timing.
+splash
+shot dwnlo_splash.png

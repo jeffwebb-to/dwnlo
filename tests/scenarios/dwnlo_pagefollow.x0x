@@ -1,0 +1,58 @@
+# DWNLO: while playing a pattern longer than 16 steps, the LCD grid and the white-key LEDs follow
+# the playhead's own page automatically (ui.c's follow_spage(), called from ui_frame()) instead of
+# staying wherever OCT+/OCT- last left it. Stopped, OCT+/OCT- still move it manually as before.
+wait 3700
+expect splash 0
+expect part 0
+expect spage 0
+
+# 909 BD, length 32 (SEQ's knob 1 is LENGTH - same convention as steps64.x0x)
+tap SEQ
+spin K1 16
+tap EDIT
+tapkey b0
+tapkey w0
+tap OCT+
+tapkey w3
+tap OCT-
+
+tap PLAY
+wait 900
+expect spage 0
+wait 1900
+expect spage 1
+wait 1900
+expect spage 0
+tap PLAY
+
+# stopped: OCT+ / OCT- still move the page by hand
+tap OCT+
+expect spage 1
+tap OCT-
+expect spage 0
+
+# OCT+ and OCT- together toggle follow off, independent of play state
+expect follow 1
+press OCT-
+tap OCT+
+release OCT-
+expect follow 0
+
+tap PLAY
+wait 900
+expect spage 0
+wait 1900
+expect spage 0
+tap PLAY
+
+# toggle it back on
+press OCT+
+tap OCT-
+release OCT+
+expect follow 1
+tap PLAY
+wait 900
+expect spage 0
+wait 1900
+expect spage 1
+tap PLAY

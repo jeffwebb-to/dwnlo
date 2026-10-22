@@ -1,0 +1,97 @@
+# README screenshots: not a test (tests/run_tests.sh doesn't touch this file). A normal boot, a
+# real demo pattern programmed through the panel like showcase.x0x does, screenshotted for docs.
+# The boot splash holds real drawing for 3600 ms (host/web half-speed hold - dwnlo_splash.c /
+# ui_frame's "holding" curtain): input still works underneath, so the pattern gets programmed
+# right away, but no shot can show anything until well past that.
+#
+# "### BURST name N" is not a real host command: tools/gen_readme_screens.sh expands each one into
+# N "wait 120 / shot name_NN.png" pairs (120 ms = one 16th note at 125 BPM, so N=16 is one exact
+# bar, looping seamlessly) before running this through the simulator.
+#   tools/gen_readme_screens.sh
+wait 300
+tap PLAY
+
+# ---- 909 (part 0): 4/4 - downbeat kick, clap on 2 and 4, upbeat closed hats
+tapkey b0
+tapkey w0
+tapkey w4
+tapkey w8
+tapkey w12
+tapkey b6
+tapkey w4
+tapkey w12
+tapkey b7
+tapkey w2
+tapkey w6
+tapkey w10
+tapkey w14
+wait 3800
+### BURST sequencer 16
+
+# ---- 808 (part 1): cowbell, rim
+turn ALGO 1
+expect part 1
+tapkey b7
+tapkey w3
+tapkey w10
+tapkey b5
+tapkey w6
+tapkey w13
+tap EDIT
+### BURST part_808 16
+tap EDIT
+
+# ---- 303 (part 2): a TB-3PO generated acid line
+turn ALGO 1
+expect part 2
+tap ARP
+tap OCT+
+tap SEQ
+### BURST part_303 16
+
+# ---- 808 Bassline (part 3): an actual bassline - 8th notes walking up to the octave and back
+# down past the root (KNOB 1 on a held step moves its note by semitones; empty steps default
+# to the root, so a 0-semitone step is just tapped)
+turn ALGO 1
+expect part 3
+tap SEQ
+tapkey w0
+key w2 down
+turn K1 3
+key w2 up
+key w4 down
+turn K1 7
+key w4 up
+key w6 down
+turn K1 12
+key w6 up
+key w8 down
+turn K1 7
+key w8 up
+key w10 down
+turn K1 3
+key w10 up
+tapkey w12
+key w14 down
+turn K1 -5
+key w14 up
+tap EDIT
+### BURST part_bassline 16
+
+# ---- BLIP (part 4): a quick run, SOUND page (Tune, Decay, Bright, Glide)
+turn ALGO 1
+expect part 4
+tap SEQ
+tapkey w0
+tapkey w2
+tapkey w4
+tapkey w6
+tap EDIT
+### BURST part_blip 16
+tap EDIT
+
+# ---- mixer (LFO button)
+tap LFO
+### BURST mixer 16
+
+tap PLAY

@@ -1,0 +1,23 @@
+# Keybed verification: black keys = lane select (steady LED), white keys = step toggle,
+# playhead scrolls across white keys while playing. All of this is PRE-EXISTING Felucca/X0X
+# code (drum_key/drum_step/leds() in ui.c); this scenario proves it, it adds nothing new.
+wait 3700
+expect splash 0
+expect view 1
+expect part 0
+
+# black key 2: select track 2 (CH on the 909) and confirm via the sel probe
+tapkey b2
+expect sel 2
+
+# light two white steps on that track so the playhead has both an on-step and an off-step to cross
+tapkey w0
+tapkey w4
+leds
+
+# start playback, then snapshot the keybed LED state at two different points in the bar
+tap PLAY
+wait 90
+leds
+wait 120
+leds

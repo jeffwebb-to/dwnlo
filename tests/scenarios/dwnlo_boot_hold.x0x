@@ -1,0 +1,12 @@
+# DWNLO's boot splash must actually hold during a NORMAL boot - no `splash` debug override here.
+# main()'s single boot() call (host/x0x_host.c) already ran before this script's first line, so
+# this exercises the real path: dwnlo_splash() set dwnlo_splash_hold_until, and ui_frame() (ui.c)
+# must hold at that deadline (3600 ms, firmware/src/dwnlo_splash.c) before clearing to black and
+# running ui_init(). Mid-hold: still up. Well past it: cleared, normal UI running.
+wait 500
+expect splash 1
+shot dwnlo_boot_mid.png
+wait 3600
+expect splash 0
+expect view 1
+shot dwnlo_boot_post.png

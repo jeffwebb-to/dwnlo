@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 834 226" width="834" height="226" role="img" aria-label="DWNLO">
+<title>DWNLO</title>
+<defs>
+<linearGradient id="rainbow" gradientUnits="userSpaceOnUse" x1="24" y1="0" x2="800" y2="0" spreadMethod="repeat">
+<stop offset="0.0000" stop-color="#7a4dff"/>
+<stop offset="0.3333" stop-color="#b14dff"/>
+<stop offset="0.6667" stop-color="#e040a0"/>
+<stop offset="1.0000" stop-color="#7a4dff"/>
+<animateTransform attributeName="gradientTransform" type="translate" from="0 0" to="776 0" dur="8s" repeatCount="indefinite"/>
+</linearGradient>
+</defs>
+<g transform="translate(34,34)" fill="none" stroke="url(#rainbow)" stroke-width="2" stroke-linecap="square" opacity="0.35">
+<line x1="0" y1="0" x2="24" y2="0"/>
+<line x1="0" y1="0" x2="0" y2="24"/>
+<line x1="24" y1="0" x2="48" y2="0"/>
+<line x1="24" y1="24" x2="48" y2="24"/>
+<line x1="48" y1="0" x2="72" y2="0"/>
+<line x1="48" y1="24" x2="72" y2="24"/>
+<line x1="72" y1="0" x2="72" y2="24"/>
+<line x1="0" y1="24" x2="0" y2="48"/>
+<line x1="24" y1="24" x2="24" y2="48"/>
+<line x1="72" y1="24" x2="96" y2="24"/>
+<line x1="72" y1="48" x2="96" y2="48"/>
+<line x1="72" y1="24" x2="72" y2="48"/>
+<line x1="96" y1="24" x2="96" y2="48"/>
+<line x1="0" y1="48" x2="0" y2="72"/>
+<line x1="24" y1="48" x2="24" y2="72"/>
+<line x1="96" y1="48" x2="120" y2="48"/>
+<line x1="96" y1="48" x2="96" y2="72"/>
+<line x1="120" y1="48" x2="120" y2="72"/>
+<line x1="0" y1="72" x2="0" y2="96"/>
+<line x1="24" y1="72" x2="24" y2="96"/>
+<line x1="96" y1="72" x2="96" y2="96"/>
+<line x1="120" y1="72" x2="120" y2="96"/>
+<line x1="0" y1="96" x2="0" y2="120"/>
+<line x1="24" y1="96" x2="24" y2="120"/>
+<line x1="96" y1="120" x2="120" y2="120"/>
+<line x1="96" y1="96" x2="96" y2="120"/>
+<line x1="120" y1="96" x2="120" y2="120"/>
+<line x1="0" y1="120" x2="0" y2="144"/>
+<line x1="24" y1="120" x2="24" y2="144"/>
+<line x1="72" y1="120" x2="96" y2="120"/>
+<line x1="72" y1="144" x2="96" y2="144"/>
+<line x1="72" y1="120" x2="72" y2="144"/>
+<line x1="96" y1="120" x2="96" y2="144"/>
+<line x1="0" y1="168" x2="24" y2="168"/>
+<line x1="0" y1="144" x2="0" y2="168"/>
+<line x1="24" y1="144" x2="48" y2="144"/>
+<line x1="24" y1="168" x2="48" y2="168"/>
+<line x1="48" y1="144" x2="72" y2="144"/>
+<line x1="48" y1="168" x2="72" y2="168"/>
+<line x1="72" y1="144" x2="72" y2="168"/>
+<polygon points="144,0 174,0 214,168 184,168"/>
+<polygon points="184,168 214,168 254,0 224,0"/>
+<polygon points="224,0 254,0 294,168 264,168"/>
+<polygon points="264,168 294,168 334,0 304,0"/>
+<rect x="358" y="0" width="30" height="168"/>
+<rect x="458" y="0" width="30" height="168"/>
+<polygon points="388,0 418,0 488,168 458,168"/>
+<line x1="512" y1="0" x2="536" y2="0"/>
+<line x1="512" y1="0" x2="512" y2="24"/>
+<line x1="536" y1="0" x2="536" y2="24"/>
+<line x1="512" y1="24" x2="512" y2="48"/>
+<line x1="536" y1="24" x2="536" y2="48"/>
+<line x1="512" y1="48" x2="512" y2="72"/>
+<line x1="536" y1="48" x2="536" y2="72"/>
+<line x1="512" y1="72" x2="512" y2="96"/>
+<line x1="536" y1="72" x2="536" y2="96"/>
+<line x1="512" y1="96" x2="512" y2="120"/>
+<line x1="536" y1="96" x2="536" y2="120"/>
+<line x1="512" y1="120" x2="512" y2="144"/>
+<line x1="536" y1="120" x2="536" y2="144"/>
+<line x1="512" y1="168" x2="536" y2="168"/>
+<line x1="512" y1="144" x2="512" y2="168"/>
+<line x1="536" y1="144" x2="560" y2="144"/>
+<line x1="536" y1="168" x2="560" y2="168"/>
+<line x1="560" y1="144" x2="584" y2="144"/>
+<line x1="560" y1="168" x2="584" y2="168"/>
+<line x1="584" y1="144" x2="608" y2="144"/>
+<line x1="584" y1="168" x2="608" y2="168"/>
+<line x1="608" y1="144" x2="632" y2="144"/>
+<line x1="608" y1="168" x2="632" y2="168"/>
+<line x1="632" y1="144" x2="632" y2="168"/>
+<line x1="680" y1="0" x2="704" y2="0"/>
+<line x1="680" y1="24" x2="704" y2="24"/>
+<line x1="680" y1="0" x2="680" y2="24"/>
+<line x1="704" y1="0" x2="728" y2="0"/>
+<line x1="704" y1="24" x2="728" y2="24"/>
+<line x1="728" y1="0" x2="752" y2="0"/>
+<line x1="728" y1="24" x2="752" y2="24"/>
+<line x1="752" y1="0" x2="752" y2="24"/>
+<line x1="656" y1="24" x2="680" y2="24"/>
+<line x1="656" y1="24" x2="656" y2="48"/>
+<line x1="680" y1="24" x2="680" y2="48"/>
+<line x1="752" y1="24" x2="776" y2="24"/>
+<line x1="752" y1="24" x2="752" y2="48"/>
+<line x1="776" y1="24" x2="776" y2="48"/>
+<line x1="656" y1="48" x2="656" y2="72"/>
+<line x1="680" y1="48" x2="680" y2="72"/>
+<line x1="752" y1="48" x2="752" y2="72"/>
+<line x1="776" y1="48" x2="776" y2="72"/>
+<line x1="656" y1="72" x2="656" y2="96"/>
+<line x1="680" y1="72" x2="680" y2="96"/>
+<line x1="752" y1="72" x2="752" y2="96"/>
+<line x1="776" y1="72" x2="776" y2="96"/>
+<line x1="656" y1="96" x2="656" y2="120"/>
+<line x1="680" y1="96" x2="680" y2="120"/>
+<line x1="752" y1="96" x2="752" y2="120"/>
+<line x1="776" y1="96" x2="776" y2="120"/>
+<line x1="656" y1="144" x2="680" y2="144"/>
+<line x1="656" y1="120" x2="656" y2="144"/>
+<line x1="680" y1="120" x2="680" y2="144"/>
+<line x1="752" y1="144" x2="776" y2="144"/>
+<line x1="752" y1="120" x2="752" y2="144"/>
+<line x1="776" y1="120" x2="776" y2="144"/>
+<line x1="680" y1="144" x2="704" y2="144"/>
+<line x1="680" y1="168" x2="704" y2="168"/>
+<line x1="680" y1="144" x2="680" y2="168"/>
+<line x1="704" y1="144" x2="728" y2="144"/>
+<line x1="704" y1="168" x2="728" y2="168"/>
+<line x1="728" y1="144" x2="752" y2="144"/>
+<line x1="728" y1="168" x2="752" y2="168"/>
+<line x1="752" y1="144" x2="752" y2="168"/>
+</g>
+<g transform="translate(24,24)" fill="url(#rainbow)">
+<rect x="0" y="0" width="72" height="24"/>
+<rect x="0" y="24" width="24" height="24"/>
+<rect x="72" y="24" width="24" height="24"/>
+<rect x="0" y="48" width="24" height="24"/>
+<rect x="96" y="48" width="24" height="24"/>
+<rect x="0" y="72" width="24" height="24"/>
+<rect x="96" y="72" width="24" height="24"/>
+<rect x="0" y="96" width="24" height="24"/>
+<rect x="96" y="96" width="24" height="24"/>
+<rect x="0" y="120" width="24" height="24"/>
+<rect x="72" y="120" width="24" height="24"/>
+<rect x="0" y="144" width="72" height="24"/>
+<polygon points="144,0 174,0 214,168 184,168"/>
+<polygon points="184,168 214,168 254,0 224,0"/>
+<polygon points="224,0 254,0 294,168 264,168"/>
+<polygon points="264,168 294,168 334,0 304,0"/>
+<rect x="358" y="0" width="30" height="168"/>
+<rect x="458" y="0" width="30" height="168"/>
+<polygon points="388,0 418,0 488,168 458,168"/>
+<rect x="512" y="0" width="24" height="24"/>
+<rect x="512" y="24" width="24" height="24"/>
+<rect x="512" y="48" width="24" height="24"/>
+<rect x="512" y="72" width="24" height="24"/>
+<rect x="512" y="96" width="24" height="24"/>
+<rect x="512" y="120" width="24" height="24"/>
+<rect x="512" y="144" width="120" height="24"/>
+<rect x="680" y="0" width="72" height="24"/>
+<rect x="656" y="24" width="24" height="24"/>
+<rect x="752" y="24" width="24" height="24"/>
+<rect x="656" y="48" width="24" height="24"/>
+<rect x="752" y="48" width="24" height="24"/>
+<rect x="656" y="72" width="24" height="24"/>
+<rect x="752" y="72" width="24" height="24"/>
+<rect x="656" y="96" width="24" height="24"/>
+<rect x="752" y="96" width="24" height="24"/>
+<rect x="656" y="120" width="24" height="24"/>
+<rect x="752" y="120" width="24" height="24"/>
+<rect x="680" y="144" width="72" height="24"/>
+</g>
+</svg>

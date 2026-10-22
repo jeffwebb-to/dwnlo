@@ -1,0 +1,17 @@
+# DWNLO: the melodic 808 bass in 303B's old slot (part 3). A normal boot (no debug override),
+# select it, play a couple of notes with glide, confirm it renders audibly without clipping,
+# and screenshot its one-page SOUND knobs (KNOB 1-4: Tune, Decay, Drive, Glide).
+wait 2200
+turn ALGO 3
+expect part 3
+tap SEQ
+tapkey w0
+tap PLAY
+wait 400
+peakreset
+wait 600
+expect peak_db_max -0.1
+expect peak_db_min -40
+tap PLAY
+tap EDIT
+shot dwnlo_m808_sound.png

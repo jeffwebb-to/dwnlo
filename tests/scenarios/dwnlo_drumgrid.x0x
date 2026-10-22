@@ -1,0 +1,36 @@
+# DWNLO: the recoloured 909 grid - per-track colours, a distinct accent row, and the
+# step-page dots when the pattern runs past 16 steps.
+wait 300
+expect view 1
+expect part 0
+# a spread of tracks so several colours show at once, plus an accent
+tapkey b0
+tapkey w0
+tapkey w4
+tapkey w8
+tapkey w12
+tapkey b6
+tapkey w4
+tapkey w12
+tapkey b8
+tapkey w2
+tapkey w6
+tapkey w10
+tapkey w14
+press ENV
+tapkey w0
+tapkey w8
+release ENV
+wait 1000
+shot dwnlo_drumgrid_p1.png
+# length to 32 (two step-pages): SEQ, knob 1, back to EDIT/HOME view
+tap SEQ
+spin K1 16
+tap EDIT
+wait 1500
+shot dwnlo_drumgrid_len32.png
+# page to steps 17-32: the page dots should now show the second one lit
+tap OCT+
+wait 1000
+shot dwnlo_drumgrid_p2.png
+tap OCT-
