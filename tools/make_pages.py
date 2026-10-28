@@ -29,6 +29,15 @@ from make_site import product_of, strip_module  # noqa: E402  (Felucca's: the pa
 
 REPO = "https://github.com/jeffwebb-to/dwnlo"
 
+SCREENS = [
+    ("sequencer.gif", "The step sequencer"),
+    ("part_808.gif", "The 808"),
+    ("part_303.gif", "The 303"),
+    ("part_bassline.gif", "The 808 Bassline"),
+    ("part_blip.gif", "BLIP"),
+    ("mixer.gif", "Mixer"),
+]
+
 LANDING = """<!doctype html>
 <html lang="en">
 <head>
@@ -38,51 +47,253 @@ LANDING = """<!doctype html>
 <meta name="description" content="An electronic music drum and synth machine for the M-VAVE FM-1: a 909, an 808, a 303, an 808 Bassline and BLIP.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600&family=Barlow+Semi+Condensed:wght@600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Baloo+2:wght@400;600;700&family=Permanent+Marker&display=swap">
 <style>
-:root { --ground: #f4f5f6; --ink: #1c1f23; --muted: #5b626a; --rule: #d9dde1; --accent: #a35a08; --card: #fff; color-scheme: light; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --ground: #131518; --ink: #e6e8eb; --muted: #9aa1a9; --rule: #2d3137; --accent: #f0a043; --card: #1a1d21; color-scheme: dark; }
+/* one world, committed: a flyer taped up for the party, not a settings screen. a disco ball up top,
+   a crowd along the bottom, everything a little crooked like it was stuck up by hand */
+:root {
+  /* dark and cool: near-black ground, a deep indigo band, ink outlines kept dark (they sit on
+     colorful art, not on the page), everything readable gets the light --fg instead */
+  --ground: #0d0a16; --card: #1a1628; --band: #241c42; --fg: #ece7f8; --ink: #15101f;
+  --accent: #ff2f92; --accent2: #19d3da; --pop: #ffd23f; color-scheme: dark;
 }
-:root[data-theme="dark"] { --ground: #131518; --ink: #e6e8eb; --muted: #9aa1a9; --rule: #2d3137; --accent: #f0a043; --card: #1a1d21; color-scheme: dark; }
-body { background: var(--ground); color: var(--ink); margin: 0; padding-inline: 16px; padding-block: 48px 64px;
-       font: 400 17px/1.6 "Barlow", "Helvetica Neue", Arial, sans-serif; }
-main { max-width: 40rem; margin: 0 auto; }
-h1 { font: 700 2.6rem/1.1 "Barlow Semi Condensed", "Barlow", sans-serif; margin: 0 0 .4rem; }
-.lede { color: var(--muted); margin: 0 0 1.6rem; max-width: 34rem; }
-.status { border: 1px solid var(--rule); background: var(--card); border-radius: 8px; padding: 12px 16px; margin: 0 0 2rem; }
-.ways { display: grid; gap: 12px; margin: 0 0 2rem; }
-.ways a { display: block; text-decoration: none; color: var(--ink); background: var(--card); border: 1px solid var(--rule);
-          border-radius: 10px; padding: 14px 18px; }
-.ways a:hover { border-color: var(--accent); }
-.ways a:focus-visible { border-color: var(--accent); outline: 2px solid var(--accent); outline-offset: 2px; }
-.ways .card { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 18px; }
-.ways .card a { color: var(--accent); text-decoration: none; border: 0; padding: 0; background: none; display: inline; }
-.ways .card a:hover, .ways .card a:focus-visible { text-decoration: underline; }
-.ways .card a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.ways .card a.new { font: 400 .95rem "Barlow", sans-serif; margin-left: .5rem; }
-.ways strong { font: 600 1.25rem "Barlow Semi Condensed", "Barlow", sans-serif; color: var(--accent); display: block; }
-.ways span { color: var(--muted); font-size: .95rem; }
-p.small { color: var(--muted); font-size: .9rem; }
-.video { position: relative; aspect-ratio: 16 / 9; max-width: 100%; margin: 1.5rem 0; border-radius: 6px; overflow: hidden; background: #000; }
-.video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-a { color: var(--accent); }
-a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+* { box-sizing: border-box; }
+body {
+  background: var(--ground); color: var(--fg); margin: 0;
+  font: 400 17px/1.6 "Baloo 2", "Helvetica Neue", Arial, sans-serif;
+}
+.wrap { max-width: 46rem; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+a { color: var(--accent2); }
+a:focus-visible { outline: 3px solid var(--pop); outline-offset: 2px; }
+
+/* the band: the hero, full width, loud, but small - the crowd up front is the real show.
+   a real clip behind it all, cropped to its own sparkle, darkened enough to read over */
+.band { background: var(--band); padding: 26px 0 0; position: relative; overflow: hidden; }
+.bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+.bg-wash { position: absolute; inset: 0; z-index: 0; background: linear-gradient(180deg, rgba(13,10,22,.4), rgba(13,10,22,.58)); }
+.bg-scan {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; mix-blend-mode: multiply;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,.5) 0px, rgba(0,0,0,.5) 3px, transparent 3px, transparent 6px);
+}
+.bg-flicker {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; mix-blend-mode: overlay;
+  background: linear-gradient(0deg, rgba(120,170,255,.06), transparent 40%);
+  animation: vhs-flicker 4s steps(1) infinite;
+}
+@keyframes vhs-flicker {
+  0%, 92%, 100% { opacity: .5; } 93% { opacity: .9; } 94% { opacity: .3; } 95% { opacity: .7; }
+}
+@media (prefers-reduced-motion: reduce) { .bg-video { display: none; } .bg-flicker { animation: none; } }
+.bgm-toggle {
+  position: absolute; top: 14px; right: 14px; z-index: 3; width: 40px; height: 40px; border-radius: 50%; padding: 0;
+  background: var(--card); border: 3px solid var(--fg); box-shadow: 3px 3px 0 var(--fg); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: transform .1s ease;
+}
+.bgm-toggle:hover, .bgm-toggle:focus-visible { transform: translate(-1px, -1px); }
+.bgm-toggle svg { width: 20px; height: 20px; display: block; }
+.bgm-toggle .bgm-on { display: none; }
+.bgm-toggle[aria-pressed="true"] .bgm-off { display: none; }
+.bgm-toggle[aria-pressed="true"] .bgm-on { display: block; }
+.doodles { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+.doodles svg { position: absolute; }
+h1.headline {
+  position: relative; font: 400 clamp(2.1rem, 9vw, 3.4rem)/.9 "Bungee", "Arial Black", sans-serif;
+  color: var(--fg); margin: 0; -webkit-text-stroke: 2.5px var(--ink); paint-order: stroke fill;
+  transform: rotate(-2deg); letter-spacing: -.01em;
+}
+h1.headline::before {
+  content: attr(data-text); position: absolute; left: 5px; top: 5px; z-index: -1; color: var(--accent);
+  -webkit-text-stroke: 2.5px var(--ink); paint-order: stroke fill;
+}
+.stage { display: block; width: min(170px, 36vw); height: auto; margin: 6px auto 0; position: relative; z-index: 1; }
+.crowd { display: block; width: 100%; height: auto; margin-top: -34px; position: relative; z-index: 2; }
+@media (prefers-reduced-motion: no-preference) { .stage { animation: bob 2.2s ease-in-out infinite; } }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+h2.section {
+  font: 400 1.8rem "Bungee", "Arial Black", sans-serif; color: var(--accent); -webkit-text-stroke: 1.5px var(--ink);
+  paint-order: stroke fill; margin: 0 0 1rem; transform: rotate(-1deg); display: inline-block;
+}
+.ways { display: grid; gap: 14px; margin: 2.4rem 0 2.6rem; }
+.ways a, .ways .card {
+  display: block; text-decoration: none; color: var(--fg); background: var(--card); border: 3px solid var(--fg);
+  border-radius: 16px 34px 16px 34px; padding: 14px 18px; box-shadow: 5px 5px 0 var(--fg);
+  transition: transform .1s ease; transform: rotate(-.4deg);
+}
+.ways > :nth-child(even) { border-radius: 34px 16px 34px 16px; transform: rotate(.5deg); }
+.ways a:hover, .ways a:focus-visible { transform: translate(-2px, -2px) rotate(0deg); }
+.ways .card a {
+  color: var(--accent2); text-decoration: underline; text-decoration-style: wavy; border: 0; padding: 0;
+  background: none; display: inline; box-shadow: none;
+}
+.ways .card a.new { font: 400 .95rem "Baloo 2", sans-serif; margin-left: .5rem; }
+.ways strong {
+  font: 700 1.2rem "Baloo 2", sans-serif; color: var(--accent); display: block;
+}
+.ways span { color: var(--fg); font-size: .95rem; opacity: .85; }
+.boot-shot { display: flex; justify-content: center; margin: 0 0 1.6rem; }
+.boot-shot figure { width: min(240px, 60vw); }
+.screens { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 0 0 2.6rem; }
+.boot-shot figure, .screens figure {
+  margin: 0; background: var(--card); border: 3px solid var(--fg); border-radius: 4px; padding: 8px;
+  box-shadow: 5px 5px 0 var(--fg); position: relative;
+}
+.boot-shot figure::before, .screens figure::before {
+  content: ""; position: absolute; top: -10px; left: 50%; width: 46px; height: 18px; margin-left: -23px;
+  background: rgba(255, 210, 63, .85); border: 1px solid var(--ink); transform: rotate(-4deg);
+}
+.screens:nth-child(n) figure:nth-child(3n+2)::before { transform: rotate(3deg); }
+.boot-shot img, .screens img { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; }
+.boot-shot figcaption, .screens figcaption { margin-top: .5rem; font-size: .85rem; }
+.boot-shot figcaption b, .screens figcaption b { display: block; color: var(--fg); font: 700 .95rem "Baloo 2", sans-serif; }
+p.small { opacity: .75; font-size: .9rem; }
+@media (max-width: 640px) { .screens { grid-template-columns: repeat(2, 1fr); } }
 </style>
 </head>
 <body>
-<main>
-<h1>DWNLO</h1>
-<p class="lede">An electronic music drum and synth machine for the M-VAVE FM-1. A 909, an 808,
-a 303 with the TB-3PO line generator, an 808 Bassline and BLIP, all playing at once, with
-patterns, a song mode and recorded knob moves.</p>
-<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/cZLYrZaLDUk" title="DWNLO running on the FM-1"
-  allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></div>
-<div class="status">DWNLO installs and uninstalls the way Felucca does, and the installer can put M-VAVE's own firmware back. Installing is
-at your own risk.</div>
+<div class="band">
+<video class="bg-video" autoplay muted loop playsinline poster="assets/hero-bg-poster.jpg" aria-hidden="true">
+<source src="assets/hero-bg.webm" type="video/webm">
+<source src="assets/hero-bg.mp4" type="video/mp4">
+</video>
+<div class="bg-wash" aria-hidden="true"></div>
+<div class="bg-scan" aria-hidden="true"></div>
+<div class="bg-flicker" aria-hidden="true"></div>
+<div class="doodles" aria-hidden="true">
+<svg width="46" height="46" viewBox="0 0 46 46" style="top:18px;left:8%"><path d="M23,2 L27,18 L43,23 L27,28 L23,44 L19,28 L3,23 L19,18 Z" fill="var(--accent2)" stroke="var(--ink)" stroke-width="2"/></svg>
+<svg width="30" height="30" viewBox="0 0 30 30" style="top:120px;right:6%"><path d="M15,2 L18,12 L28,15 L18,18 L15,28 L12,18 L2,15 L12,12 Z" fill="var(--pop)" stroke="var(--ink)" stroke-width="2"/></svg>
+<svg width="34" height="46" viewBox="0 0 34 46" style="top:40px;right:14%"><ellipse cx="10" cy="38" rx="8" ry="6" fill="var(--ink)"/><rect x="17" y="2" width="4" height="34" fill="var(--ink)"/><path d="M21,2 Q33,6 21,14 Z" fill="var(--ink)"/></svg>
+<svg width="26" height="26" viewBox="0 0 26 26" style="top:70px;left:4%"><circle cx="13" cy="13" r="10" fill="var(--accent)" stroke="var(--ink)" stroke-width="2"/></svg>
+<svg width="168" height="92" viewBox="0 0 168 92" style="top:0;right:52px">
+<text x="78" y="32" text-anchor="middle" font-family="Bungee, sans-serif" font-size="27" fill="var(--pop)" stroke="var(--ink)" stroke-width="2" paint-order="stroke fill" transform="rotate(-9 78 32)">SOUND</text>
+<text x="84" y="62" text-anchor="middle" font-family="Bungee, sans-serif" font-size="27" fill="var(--pop)" stroke="var(--ink)" stroke-width="2" paint-order="stroke fill" transform="rotate(-9 84 62)">ON</text>
+<path d="M110.8,81.1 L139.7,61.9 L145.8,71 L160,42 L127.9,44.5 L134,53.6 L105.2,72.9 Z" fill="var(--accent)" stroke="var(--ink)" stroke-width="3.5" stroke-linejoin="round"/>
+<path d="M113,77 L136,60" stroke="var(--pop)" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".8"/>
+</svg>
+</div>
+<audio id="bgm" loop muted autoplay playsinline>
+<source src="assets/loop-bg.ogg" type="audio/ogg">
+<source src="assets/loop-bg.mp3" type="audio/mpeg">
+</audio>
+<button type="button" id="bgm-toggle" class="bgm-toggle" aria-pressed="false" aria-label="Turn the background loop on">
+<svg class="bgm-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z" fill="var(--fg)" stroke="var(--ink)" stroke-width="1.3"/><path d="M16 9l5 5M21 9l-5 5" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/></svg>
+<svg class="bgm-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Z" fill="var(--fg)" stroke="var(--ink)" stroke-width="1.3"/><path d="M16 8a5 5 0 010 8M19 5a9 9 0 010 14" stroke="var(--ink)" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>
+</button>
+<div class="wrap">
+<h1 class="headline" data-text="DWNLO">DWNLO</h1>
+<svg class="stage" viewBox="0 0 320 240" role="img" aria-label="A DJ on a little stage, playing the FM-1, speakers blasting on either side">
+<path d="M56,100 Q38,85 56,66" stroke="var(--pop)" stroke-width="4" stroke-linecap="round" fill="none"/>
+<path d="M63,108 Q32,85 63,56" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" fill="none"/>
+<path d="M264,100 Q282,85 264,66" stroke="var(--pop)" stroke-width="4" stroke-linecap="round" fill="none"/>
+<path d="M257,108 Q288,85 257,56" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" fill="none"/>
+<rect x="10" y="110" width="44" height="102" rx="4" fill="var(--ink)"/>
+<circle cx="32" cy="138" r="13" fill="var(--card)" stroke="var(--ink)" stroke-width="2.5"/>
+<circle cx="32" cy="182" r="9" fill="var(--card)" stroke="var(--ink)" stroke-width="2.5"/>
+<rect x="266" y="110" width="44" height="102" rx="4" fill="var(--ink)"/>
+<circle cx="288" cy="138" r="13" fill="var(--card)" stroke="var(--ink)" stroke-width="2.5"/>
+<circle cx="288" cy="182" r="9" fill="var(--card)" stroke="var(--ink)" stroke-width="2.5"/>
+<path d="M95,168 L80,230 L250,230 L235,168 Z" fill="var(--accent2)" stroke="var(--ink)" stroke-width="5"/>
+<rect x="90" y="163" width="150" height="8" fill="var(--card)" stroke="var(--ink)" stroke-width="3"/>
+<rect x="90" y="100" width="150" height="58" rx="16" fill="#2a241f" stroke="var(--ink)" stroke-width="4"/>
+<circle cx="100" cy="108" r="3" fill="var(--pop)" stroke="var(--ink)" stroke-width="1"/>
+<circle cx="110" cy="108" r="3" fill="var(--pop)" stroke="var(--ink)" stroke-width="1"/>
+<circle cx="100" cy="118" r="3" fill="var(--pop)" stroke="var(--ink)" stroke-width="1"/>
+<circle cx="110" cy="118" r="3" fill="var(--pop)" stroke="var(--ink)" stroke-width="1"/>
+<rect x="122" y="106" width="42" height="22" rx="2" fill="var(--accent)" stroke="var(--ink)" stroke-width="2"/>
+<circle cx="178" cy="112" r="4" fill="var(--pop)" stroke="var(--ink)" stroke-width="1.2"/>
+<circle cx="190" cy="112" r="4" fill="var(--pop)" stroke="var(--ink)" stroke-width="1.2"/>
+<circle cx="202" cy="112" r="4" fill="var(--pop)" stroke="var(--ink)" stroke-width="1.2"/>
+<circle cx="214" cy="112" r="4" fill="var(--pop)" stroke="var(--ink)" stroke-width="1.2"/>
+<g fill="#4a4238">
+<rect x="174" y="121" width="6" height="6" rx="1"/><rect x="184" y="121" width="6" height="6" rx="1"/><rect x="194" y="121" width="6" height="6" rx="1"/>
+<rect x="204" y="121" width="6" height="6" rx="1"/><rect x="174" y="129" width="6" height="6" rx="1"/><rect x="184" y="129" width="6" height="6" rx="1"/>
+<rect x="194" y="129" width="6" height="6" rx="1"/><rect x="204" y="129" width="6" height="6" rx="1"/>
+</g>
+<rect x="98" y="138" width="134" height="18" rx="3" fill="#3a342c" stroke="var(--ink)" stroke-width="2"/>
+<g fill="#c9c9c9" stroke="var(--ink)" stroke-width=".8">
+<rect x="102" y="140" width="4.5" height="13" rx="1.5"/><rect x="110.5" y="140" width="4.5" height="13" rx="1.5"/><rect x="119" y="140" width="4.5" height="13" rx="1.5"/>
+<rect x="127.5" y="140" width="4.5" height="13" rx="1.5"/><rect x="136" y="140" width="4.5" height="13" rx="1.5"/><rect x="144.5" y="140" width="4.5" height="13" rx="1.5"/>
+<rect x="153" y="140" width="4.5" height="13" rx="1.5"/><rect x="161.5" y="140" width="4.5" height="13" rx="1.5"/><rect x="170" y="140" width="4.5" height="13" rx="1.5"/>
+<rect x="178.5" y="140" width="4.5" height="13" rx="1.5"/><rect x="187" y="140" width="4.5" height="13" rx="1.5"/><rect x="195.5" y="140" width="4.5" height="13" rx="1.5"/>
+<rect x="204" y="140" width="4.5" height="13" rx="1.5"/><rect x="212.5" y="140" width="4.5" height="13" rx="1.5"/><rect x="221" y="140" width="4.5" height="13" rx="1.5"/>
+</g>
+<circle cx="165" cy="44" r="18" fill="#1a1210"/>
+<circle cx="165" cy="50" r="13" fill="#c6874f" stroke="var(--ink)" stroke-width="3"/>
+<rect x="155" y="47" width="20" height="5" rx="1.5" fill="var(--ink)"/>
+<path d="M159,58 Q165,63 171,58" stroke="var(--ink)" stroke-width="2" fill="none" stroke-linecap="round"/>
+<path d="M150,64 Q165,59 180,64 L184,100 Q165,107 146,100 Z" fill="var(--accent2)" stroke="var(--ink)" stroke-width="3.5"/>
+<path d="M152,66 L195,108" stroke="#c6874f" stroke-width="8" stroke-linecap="round" fill="none"/>
+<path d="M178,66 L200,28" stroke="#c6874f" stroke-width="8" stroke-linecap="round" fill="none"/>
+<path d="M210,12 L213,20 L221,23 L213,26 L210,34 L207,26 L199,23 L207,20 Z" fill="var(--pop)" stroke="var(--ink)" stroke-width="1.5"/>
+<circle cx="196" cy="110" r="5.5" fill="#c6874f" stroke="var(--ink)" stroke-width="2"/>
+<circle cx="201" cy="25" r="5.5" fill="#c6874f" stroke="var(--ink)" stroke-width="2"/>
+</svg>
+<svg class="crowd" viewBox="0 0 925 220" role="img" aria-label="A crowd dancing, bigger and up front, two lowriders hopping on hydraulics behind them, and big speaker stacks at each end">
+<g transform="translate(35,160)">
+<path d="M-40,-110 Q-58,-122 -40,-138" stroke="var(--pop)" stroke-width="4" fill="none" stroke-linecap="round" opacity=".8"/>
+<path d="M-46,-92 Q-66,-108 -46,-128" stroke="var(--accent)" stroke-width="3.5" fill="none" stroke-linecap="round" opacity=".6"/>
+<rect x="-32" y="-88" width="64" height="88" rx="4" fill="var(--ink)"/>
+<circle cx="0" cy="-55" r="24" fill="#2a241f" stroke="#666" stroke-width="2.5"/><circle cx="0" cy="-55" r="10" fill="#555"/>
+<rect x="-28" y="-155" width="56" height="67" rx="4" fill="var(--ink)"/>
+<circle cx="0" cy="-135" r="15" fill="#2a241f" stroke="#666" stroke-width="2.2"/><circle cx="0" cy="-135" r="6" fill="#555"/>
+<circle cx="0" cy="-104" r="11" fill="#2a241f" stroke="#666" stroke-width="2"/><circle cx="0" cy="-104" r="4.5" fill="#555"/>
+</g>
+<g transform="translate(110,150) scale(1.15) rotate(-14)">
+<path d="M-18,-10 L-18,-26 L10,-26 L16,-38 L64,-38 L70,-26 L98,-26 L98,-10 Z" fill="var(--pop)" stroke="var(--ink)" stroke-width="3.5"/>
+<rect x="21" y="-35" width="18" height="12" fill="#2a241f"/><rect x="43" y="-35" width="20" height="12" fill="#2a241f"/>
+<rect x="-22" y="-5" width="9" height="5" fill="#ddd" stroke="var(--ink)" stroke-width="1.5"/><rect x="98" y="-5" width="9" height="5" fill="#ddd" stroke="var(--ink)" stroke-width="1.5"/>
+<rect x="-19" y="-17" width="5" height="7" fill="var(--accent)"/><circle cx="95" cy="-13" r="3" fill="#fff6e2" stroke="var(--ink)" stroke-width="1"/>
+<path d="M68,18 Q78,10 88,18" stroke="var(--ink)" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".7"/>
+<path d="M72,26 Q80,20 86,26" stroke="var(--ink)" stroke-width="2" fill="none" stroke-linecap="round" opacity=".5"/>
+<ellipse cx="0" cy="13" rx="8" ry="2.5" fill="var(--ink)" opacity=".35"/>
+<circle cx="0" cy="0" r="13" fill="#1a1210" stroke="var(--ink)" stroke-width="2"/><circle cx="0" cy="0" r="5" fill="#bbb"/>
+<circle cx="80" cy="0" r="13" fill="#1a1210" stroke="var(--ink)" stroke-width="2"/><circle cx="80" cy="0" r="5" fill="#bbb"/>
+</g>
+<g transform="translate(820,150) scale(-1.15,1.15) rotate(-14)">
+<path d="M-18,-10 L-18,-26 L10,-26 L16,-38 L64,-38 L70,-26 L98,-26 L98,-10 Z" fill="var(--accent)" stroke="var(--ink)" stroke-width="3.5"/>
+<rect x="21" y="-35" width="18" height="12" fill="#2a241f"/><rect x="43" y="-35" width="20" height="12" fill="#2a241f"/>
+<rect x="-22" y="-5" width="9" height="5" fill="#ddd" stroke="var(--ink)" stroke-width="1.5"/><rect x="98" y="-5" width="9" height="5" fill="#ddd" stroke="var(--ink)" stroke-width="1.5"/>
+<rect x="-19" y="-17" width="5" height="7" fill="var(--pop)"/><circle cx="95" cy="-13" r="3" fill="#fff6e2" stroke="var(--ink)" stroke-width="1"/>
+<path d="M68,18 Q78,10 88,18" stroke="var(--ink)" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".7"/>
+<path d="M72,26 Q80,20 86,26" stroke="var(--ink)" stroke-width="2" fill="none" stroke-linecap="round" opacity=".5"/>
+<ellipse cx="0" cy="13" rx="8" ry="2.5" fill="var(--ink)" opacity=".35"/>
+<circle cx="0" cy="0" r="13" fill="#1a1210" stroke="var(--ink)" stroke-width="2"/><circle cx="0" cy="0" r="5" fill="#bbb"/>
+<circle cx="80" cy="0" r="13" fill="#1a1210" stroke="var(--ink)" stroke-width="2"/><circle cx="80" cy="0" r="5" fill="#bbb"/>
+</g>
+<g transform="translate(195,145) scale(1.35)"><path d="M-11,-54 Q-12,-67 0,-68 Q12,-67 11,-54 Q11,-50 0,-49 Q-11,-50 -11,-54 Z" fill="var(--accent2)" stroke="var(--ink)" stroke-width="1.6"/><path d="M4,-51 Q14,-50 15,-46 Q9,-47 3,-48 Z" fill="var(--accent2)" stroke="var(--ink)" stroke-width="1.6"/><circle cy="-54" r="9" fill="#eab382" stroke="var(--ink)" stroke-width="2.2"/><circle cx="-3.5" cy="-55" r="1.4" fill="var(--ink)"/><circle cx="3.5" cy="-55" r="1.4" fill="var(--ink)"/><path d="M-3.5,-50 Q0,-47 3.5,-50" stroke="var(--ink)" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M-9,-42 Q0,-46 9,-42 L10,-8 Q0,-3 -10,-8 Z" fill="var(--accent)" stroke="var(--ink)" stroke-width="2.2"/><path d="M-8,-40 L-19,-60" stroke="#eab382" stroke-width="6.5" stroke-linecap="round"/><circle cx="-20" cy="-62" r="4" fill="#eab382" stroke="var(--ink)" stroke-width="1.6"/><path d="M8,-40 L19,-58" stroke="#eab382" stroke-width="6.5" stroke-linecap="round"/><circle cx="20" cy="-60" r="4" fill="#eab382" stroke="var(--ink)" stroke-width="1.6"/><path d="M-7,-7 L-15,28" stroke="#2b3a67" stroke-width="7.5" stroke-linecap="round"/><ellipse cx="-16" cy="31" rx="5.5" ry="3" fill="var(--ink)"/><path d="M7,-7 L15,28" stroke="#2b3a67" stroke-width="7.5" stroke-linecap="round"/><ellipse cx="16" cy="31" rx="5.5" ry="3" fill="var(--ink)"/></g>
+<g transform="translate(263,147) scale(-1.35,1.35)"><path d="M-11,-62 Q0,-72 11,-62 Q13,-50 8,-48 Q0,-54 -8,-48 Q-13,-50 -11,-62 Z" fill="#c23589"/><circle cy="-54" r="9" fill="#c6874f" stroke="var(--ink)" stroke-width="2.2"/><circle cx="-3.5" cy="-55" r="1.4" fill="var(--ink)"/><circle cx="3.5" cy="-55" r="1.4" fill="var(--ink)"/><path d="M-3.5,-50 Q0,-47 3.5,-50" stroke="var(--ink)" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M-9,-42 Q2,-46 10,-40 L10,-6 Q-2,2 -12,-6 Z" fill="var(--accent2)" stroke="var(--ink)" stroke-width="2.2"/><path d="M-8,-40 L-22,-58" stroke="#c6874f" stroke-width="6.5" stroke-linecap="round"/><circle cx="-23" cy="-60" r="4" fill="#c6874f" stroke="var(--ink)" stroke-width="1.6"/><path d="M8,-38 L24,-20" stroke="#c6874f" stroke-width="6.5" stroke-linecap="round"/><circle cx="25" cy="-18" r="4" fill="#c6874f" stroke="var(--ink)" stroke-width="1.6"/><path d="M-8,-6 L4,30" stroke="#6a3fd0" stroke-width="7.5" stroke-linecap="round"/><ellipse cx="5" cy="33" rx="5.5" ry="3" fill="var(--ink)"/><path d="M8,-6 L22,22" stroke="#6a3fd0" stroke-width="7.5" stroke-linecap="round"/><ellipse cx="23" cy="25" rx="5.5" ry="3" fill="var(--ink)"/></g>
+<g transform="translate(331,143) scale(1.35)"><path d="M-10,-57 Q-10,-64 -6,-63 L-3,-68 L0,-63 L3,-68 L6,-63 L8,-64 Q11,-64 10,-57 Q0,-52 -10,-57 Z" fill="#e8e2d5" stroke="var(--ink)" stroke-width="1.5"/><circle cy="-56" r="10" fill="#8a5a34" stroke="var(--ink)" stroke-width="2.2"/><circle cx="-3.8" cy="-57" r="1.5" fill="var(--ink)"/><circle cx="3.8" cy="-57" r="1.5" fill="var(--ink)"/><path d="M-4,-51 Q0,-47 4,-51" stroke="var(--ink)" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M-10,-44 Q0,-48 10,-44 L11,-8 Q0,0 -11,-8 Z" fill="var(--pop)" stroke="var(--ink)" stroke-width="2.2"/><path d="M-9,-40 L-26,-30" stroke="#8a5a34" stroke-width="6.5" stroke-linecap="round"/><circle cx="-28" cy="-29" r="4" fill="#8a5a34" stroke="var(--ink)" stroke-width="1.6"/><path d="M9,-40 L26,-30" stroke="#8a5a34" stroke-width="6.5" stroke-linecap="round"/><circle cx="28" cy="-29" r="4" fill="#8a5a34" stroke="var(--ink)" stroke-width="1.6"/><path d="M-9,-8 L-22,28" stroke="#0f766e" stroke-width="7.5" stroke-linecap="round"/><ellipse cx="-23" cy="31" rx="5.5" ry="3" fill="var(--ink)"/><path d="M9,-8 L22,28" stroke="#0f766e" stroke-width="7.5" stroke-linecap="round"/><ellipse cx="23" cy="31" rx="5.5" ry="3" fill="var(--ink)"/></g>
+<g transform="translate(399,146) scale(1.35)"><path d="M-11,-62 Q0,-72 11,-62 Q13,-50 8,-48 Q0,-54 -8,-48 Q-13,-50 -11,-62 Z" fill="#5a3420"/><circle cy="-54" r="9" fill="#f4cfa0" stroke="var(--ink)" stroke-width="2.2"/><circle cx="-3.5" cy="-55" r="1.4" fill="var(--ink)"/><circle cx="3.5" cy="-55" r="1.4" fill="var(--ink)"/><path d="M-3.5,-50 Q0,-47 3.5,-50" stroke="var(--ink)" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M-9,-42 Q0,-46 9,-42 L10,-8 Q0,-3 -10,-8 Z" fill="#34c759" stroke="var(--ink)" stroke-width="2.2"/><path d="M-8,-40 L-19,-60" stroke="#f4cfa0" stroke-width="6.5" stroke-linecap="round"/><circle cx="-20" cy="-62" r="4" fill="#f4cfa0" stroke="var(--ink)" stroke-width="1.6"/><path d="M8,-40 L19,-58" stroke="#f4cfa0" stroke-width="6.5" stroke-linecap="round"/><circle cx="20" cy="-60" r="4" fill="#f4cfa0" stroke="var(--ink)" stroke-width="1.6"/><path d="M-7,-7 L-15,28" stroke="#1c140f" stroke-width="7.5" stroke-linecap="round"/><ellipse cx="-16" cy="31" rx="5.5" ry="3" fill="var(--ink)"/><path d="M7,-7 L15,28" stroke="#1c140f" stroke-width="7.5" stroke-linecap="round"/><ellipse cx="16" cy="31" rx="5.5" ry="3" fill="var(--ink)"/></g>
+<g transform="translate(467,148) scale(1.35)"><ellipse cx="-11" cy="-50" rx="5" ry="7" fill="#e4c14a" transform="rotate(-25 -11 -50)"/><ellipse cx="11" cy="-50" rx="5" ry="7" fill="#e4c14a" transform="rotate(25 11 -50)"/><circle cy="-46" r="9" fill="#eab382" stroke="var(--ink)" stroke-width="2.2"/><circle cx="-3.5" cy="-47" r="1.4" fill="var(--ink)"/><circle cx="3.5" cy="-47" r="1.4" fill="var(--ink)"/><path d="M-8,-38 Q0,-34 8,-37 L9,-20 Q0,-16 -9,-20 Z" fill="var(--pop)" stroke="var(--ink)" stroke-width="2.2"/><ellipse cy="-14" rx="13" ry="9" fill="#2b3a67" stroke="var(--ink)" stroke-width="2.2"/><path d="M-7,-34 L-14,-18" stroke="#eab382" stroke-width="5.5" stroke-linecap="round"/><circle cx="-15" cy="-16" r="3.4" fill="#eab382" stroke="var(--ink)" stroke-width="1.4"/><path d="M7,-34 L14,-18" stroke="#eab382" stroke-width="5.5" stroke-linecap="round"/><circle cx="15" cy="-16" r="3.4" fill="#eab382" stroke="var(--ink)" stroke-width="1.4"/><path d="M-8,-18 L-13,4 L-15,24" stroke="#eab382" stroke-width="6.5" stroke-linecap="round" fill="none"/><ellipse cx="-16" cy="27" rx="5" ry="3" fill="var(--ink)"/><path d="M8,-18 L13,4 L15,24" stroke="#eab382" stroke-width="6.5" stroke-linecap="round" fill="none"/><ellipse cx="16" cy="27" rx="5" ry="3" fill="var(--ink)"/></g>
+<g transform="translate(535,145) scale(-1.35,1.35)"><path d="M-11,-54 Q-12,-67 0,-68 Q12,-67 11,-54 Q11,-50 0,-49 Q-11,-50 -11,-54 Z" fill="var(--pop)" stroke="var(--ink)" stroke-width="1.6"/><path d="M4,-51 Q14,-50 15,-46 Q9,-47 3,-48 Z" fill="var(--pop)" stroke="var(--ink)" stroke-width="1.6"/><circle cy="-54" r="9" fill="#c6874f" stroke="var(--ink)" stroke-width="2.2"/><circle cx="-3.5" cy="-55" r="1.4" fill="var(--ink)"/><circle cx="3.5" cy="-55" r="1.4" fill="var(--ink)"/><path d="M-3.5,-50 Q0,-47 3.5,-50" stroke="var(--ink)" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M-9,-42 Q2,-46 10,-40 L10,-6 Q-2,2 -12,-6 Z" fill="#c23589" stroke="var(--ink)" stroke-width="2.2"/><path d="M-8,-40 L-22,-58" stroke="#c6874f" stroke-width="6.5" stroke-linecap="round"/><circle cx="-23" cy="-60" r="4" fill="#c6874f" stroke="var(--ink)" stroke-width="1.6"/><path d="M8,-38 L24,-20" stroke="#c6874f" stroke-width="6.5" stroke-linecap="round"/><circle cx="25" cy="-18" r="4" fill="#c6874f" stroke="var(--ink)" stroke-width="1.6"/><path d="M-8,-6 L4,30" stroke="#0f766e" stroke-width="7.5" stroke-linecap="round"/><ellipse cx="5" cy="33" rx="5.5" ry="3" fill="var(--ink)"/><path d="M8,-6 L22,22" stroke="#0f766e" stroke-width="7.5" stroke-linecap="round"/><ellipse cx="23" cy="25" rx="5.5" ry="3" fill="var(--ink)"/></g>
+<g transform="translate(603,147) scale(1.35)"><path d="M-11,-62 Q0,-72 11,-62 Q13,-50 8,-48 Q0,-54 -8,-48 Q-13,-50 -11,-62 Z" fill="#e4c14a"/><circle cy="-54" r="9" fill="#f4cfa0" stroke="var(--ink)" stroke-width="2.2"/><circle cx="-3.5" cy="-55" r="1.4" fill="var(--ink)"/><circle cx="3.5" cy="-55" r="1.4" fill="var(--ink)"/><path d="M-3.5,-50 Q0,-47 3.5,-50" stroke="var(--ink)" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M-9,-42 Q0,-46 9,-42 L10,-8 Q0,-3 -10,-8 Z" fill="var(--accent2)" stroke="var(--ink)" stroke-width="2.2"/><path d="M-8,-40 L-19,-60" stroke="#f4cfa0" stroke-width="6.5" stroke-linecap="round"/><circle cx="-20" cy="-62" r="4" fill="#f4cfa0" stroke="var(--ink)" stroke-width="1.6"/><path d="M8,-40 L19,-58" stroke="#f4cfa0" stroke-width="6.5" stroke-linecap="round"/><circle cx="20" cy="-60" r="4" fill="#f4cfa0" stroke="var(--ink)" stroke-width="1.6"/><path d="M-7,-7 L-15,28" stroke="#1c140f" stroke-width="7.5" stroke-linecap="round"/><ellipse cx="-16" cy="31" rx="5.5" ry="3" fill="var(--ink)"/><path d="M7,-7 L15,28" stroke="#1c140f" stroke-width="7.5" stroke-linecap="round"/><ellipse cx="16" cy="31" rx="5.5" ry="3" fill="var(--ink)"/></g>
+<g transform="translate(671,146) scale(1.35)"><ellipse cx="-11" cy="-50" rx="5" ry="7" fill="#1a1210" transform="rotate(-25 -11 -50)"/><ellipse cx="11" cy="-50" rx="5" ry="7" fill="#1a1210" transform="rotate(25 11 -50)"/><circle cy="-46" r="9" fill="#c6874f" stroke="var(--ink)" stroke-width="2.2"/><circle cx="-3.5" cy="-47" r="1.4" fill="var(--ink)"/><circle cx="3.5" cy="-47" r="1.4" fill="var(--ink)"/><path d="M-8,-38 Q0,-34 8,-37 L9,-20 Q0,-16 -9,-20 Z" fill="#34c759" stroke="var(--ink)" stroke-width="2.2"/><ellipse cy="-14" rx="13" ry="9" fill="#1c140f" stroke="var(--ink)" stroke-width="2.2"/><path d="M-7,-34 L-14,-18" stroke="#c6874f" stroke-width="5.5" stroke-linecap="round"/><circle cx="-15" cy="-16" r="3.4" fill="#c6874f" stroke="var(--ink)" stroke-width="1.4"/><path d="M7,-34 L14,-18" stroke="#c6874f" stroke-width="5.5" stroke-linecap="round"/><circle cx="15" cy="-16" r="3.4" fill="#c6874f" stroke="var(--ink)" stroke-width="1.4"/><path d="M-8,-18 L-13,4 L-15,24" stroke="#c6874f" stroke-width="6.5" stroke-linecap="round" fill="none"/><ellipse cx="-16" cy="27" rx="5" ry="3" fill="var(--ink)"/><path d="M8,-18 L13,4 L15,24" stroke="#c6874f" stroke-width="6.5" stroke-linecap="round" fill="none"/><ellipse cx="16" cy="27" rx="5" ry="3" fill="var(--ink)"/></g>
+<g transform="translate(739,144) scale(-1.35,1.35)"><path d="M-10,-57 Q-10,-64 -6,-63 L-3,-68 L0,-63 L3,-68 L6,-63 L8,-64 Q11,-64 10,-57 Q0,-52 -10,-57 Z" fill="#5a3420" stroke="var(--ink)" stroke-width="1.5"/><circle cy="-56" r="10" fill="#8a5a34" stroke="var(--ink)" stroke-width="2.2"/><circle cx="-3.8" cy="-57" r="1.5" fill="var(--ink)"/><circle cx="3.8" cy="-57" r="1.5" fill="var(--ink)"/><path d="M-4,-51 Q0,-47 4,-51" stroke="var(--ink)" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M-10,-44 Q0,-48 10,-44 L11,-8 Q0,0 -11,-8 Z" fill="var(--accent)" stroke="var(--ink)" stroke-width="2.2"/><path d="M-9,-40 L-26,-30" stroke="#8a5a34" stroke-width="6.5" stroke-linecap="round"/><circle cx="-28" cy="-29" r="4" fill="#8a5a34" stroke="var(--ink)" stroke-width="1.6"/><path d="M9,-40 L26,-30" stroke="#8a5a34" stroke-width="6.5" stroke-linecap="round"/><circle cx="28" cy="-29" r="4" fill="#8a5a34" stroke="var(--ink)" stroke-width="1.6"/><path d="M-9,-8 L-22,28" stroke="#6a3fd0" stroke-width="7.5" stroke-linecap="round"/><ellipse cx="-23" cy="31" rx="5.5" ry="3" fill="var(--ink)"/><path d="M9,-8 L22,28" stroke="#6a3fd0" stroke-width="7.5" stroke-linecap="round"/><ellipse cx="23" cy="31" rx="5.5" ry="3" fill="var(--ink)"/></g>
+<g transform="translate(885,160) scale(-1,1)">
+<path d="M-40,-110 Q-58,-122 -40,-138" stroke="var(--pop)" stroke-width="4" fill="none" stroke-linecap="round" opacity=".8"/>
+<path d="M-46,-92 Q-66,-108 -46,-128" stroke="var(--accent)" stroke-width="3.5" fill="none" stroke-linecap="round" opacity=".6"/>
+<rect x="-32" y="-88" width="64" height="88" rx="4" fill="var(--ink)"/>
+<circle cx="0" cy="-55" r="24" fill="#2a241f" stroke="#666" stroke-width="2.5"/><circle cx="0" cy="-55" r="10" fill="#555"/>
+<rect x="-28" y="-155" width="56" height="67" rx="4" fill="var(--ink)"/>
+<circle cx="0" cy="-135" r="15" fill="#2a241f" stroke="#666" stroke-width="2.2"/><circle cx="0" cy="-135" r="6" fill="#555"/>
+<circle cx="0" cy="-104" r="11" fill="#2a241f" stroke="#666" stroke-width="2"/><circle cx="0" cy="-104" r="4.5" fill="#555"/>
+</g>
+</svg>
+</div>
+</div>
+<main class="wrap" style="padding-top:2.4rem; padding-bottom:3.2rem;">
 <nav class="ways" aria-label="Get DWNLO">
   <a href="emu/"><strong>Try it in the browser</strong><span>The same code the FM-1 runs, with sound. Mouse, touch or keyboard; no FM-1 needed.</span></a>
   <div class="card"><strong><a href="install/">Install v__VERSION__</a></strong><span>From Chrome or Edge, with the FM-1 connected by USB. Nothing to install on the computer.</span></div>
+</nav>
+<h2 class="section">Screens</h2>
+<div class="boot-shot">
+__BOOTSHOT__
+</div>
+<div class="screens">
+__SCREENS__
+</div>
+<nav class="ways" aria-label="More">
   <a href="manual/"><strong>Manual</strong><span>Getting started in ten steps, then everything else.</span></a>
   <a href="backup/"><strong>Back up your project</strong><span>Save your project to a file, and load it back later. Keep as many as you like.</span></a>
   <a href="https://charlesvestal.github.io/fm1-reader/"><strong>Screen reader</strong><span>Hear what the screen shows, with the page's voice or your own screen reader.</span></a>
@@ -92,6 +303,19 @@ at your own risk.</div>
 <p class="small">To go back to the official firmware, use M-VAVE's updater, M-UPGRADE, from
 <a href="https://www.m-vave.com/download">m-vave.com/download</a>.</p>
 </main>
+<script>
+(function () {
+  var btn = document.getElementById("bgm-toggle"), audio = document.getElementById("bgm");
+  if (!btn || !audio) return;
+  btn.addEventListener("click", function () {
+    var on = btn.getAttribute("aria-pressed") !== "true";
+    audio.muted = !on;
+    if (on) audio.play().catch(function () {});
+    btn.setAttribute("aria-pressed", String(on));
+    btn.setAttribute("aria-label", on ? "Turn the background loop off" : "Turn the background loop on");
+  });
+})();
+</script>
 </body>
 </html>
 """
@@ -125,9 +349,22 @@ def main(pkg, version, out):
     # the manual (a complete page, no images)
     subprocess.run([sys.executable, str(SRC / "tools" / "manual_html.py"), str(SRC / "docs" / "MANUAL.md"),
                     str(out / "manual" / "index.html")], check=True, capture_output=True)
-    # the landing page
+    # the landing page: its screens (README's gifs, the boot splash first), and the hero's background clip
+    (out / "assets" / "screens").mkdir(parents=True)
+    for f in ("hero_bg.mp4", "hero_bg.webm", "hero_bg_poster.jpg", "loop_bg.mp3", "loop_bg.ogg"):
+        shutil.copy(SRC / ".github" / f, out / "assets" / f.replace("_", "-"))
+    shutil.copy(SRC / ".github" / "splash.gif", out / "assets" / "screens" / "splash.gif")
+    for f, *_ in SCREENS:
+        shutil.copy(SRC / ".github" / "screens" / f, out / "assets" / "screens" / f)
+    def shot(f, label):
+        return (f'<figure><img src="assets/screens/{f}" alt="{html.escape(label)}, playing">'
+                f'<figcaption><b>{html.escape(label)}</b></figcaption></figure>')
+    bootshot = shot("splash.gif", "Boot splash")
+    screens = "\n".join(shot(f, label) for f, label in SCREENS)
     (out / "index.html").write_text(LANDING.replace("__VERSION__", html.escape(version)).replace("__PKG__", name)
-                                    .replace("__REPO__", REPO), encoding="utf-8")
+                                    .replace("__BOOTSHOT__", bootshot)
+                                    .replace("__REPO__", REPO).replace("__SCREENS__", screens),
+                                    encoding="utf-8")
     emu = SRC / "build" / "emu"
     if not (emu / "x0x.wasm").exists():
         raise SystemExit("no build/emu/x0x.wasm: run web/emu/build.sh (needs Emscripten)")

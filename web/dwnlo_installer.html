@@ -56,15 +56,6 @@
   <p id="status" role="status"></p>
   <p id="alert" role="alert"></p>
   <pre id="log"></pre>
-  <h2 data-t="stockh"></h2>
-  <p class="small" data-t="stockwhy"></p>
-  <p class="small"><span data-t="keep"></span> <a href="../backup/" style="color:inherit" data-t="keeplink"></a></p>
-  <ol class="small">
-    <li><span data-t="stock1"></span> <a id="stocklink" href="https://yms-file-store.oss-cn-hongkong.aliyuncs.com/software/firmware/FM-1.fwsc" style="color:inherit">FM-1.fwsc</a></li>
-    <li><label for="stockfile" data-t="stock2"></label><br><input type="file" id="stockfile" accept=".fwsc"></li>
-    <li data-t="stock3"></li>
-  </ol>
-  <p><button id="stockgo" disabled data-t="stockinstall"></button></p>
   <p><a href="../manual/" style="color:inherit" data-t="manual"></a></p>
   <p class="small">DWNLO is a fork of X0X, itself a fork of Felucca by Leo Kuroshita (@kurogedelic), <a href="https://hugelton.com" target="_blank" rel="noopener" style="color:inherit">Hügelton Instruments<span class="sr" data-t="newtab"></span></a>.
     The 909 is from 9W9 and ER-99, the 808 from 8W8, the 303 from schwung-303 (Open303) and TB-3PO; the 808 Bassline and BLIP are DWNLO's own.<br>
@@ -85,18 +76,7 @@ const TEXT = {
     brick: "万一 FM-1 が起動しなくなった場合は、Mac から標準ファームウェアに戻せます:",
     bricklink: "起動しない FM-1 の復旧（マニュアル）",
     beta: "これはベータ版で、不安定な場合があります。このカスタムファームウェアを使ったことで FM-1 が壊れたり不具合が起きたりしても、作者は一切の責任を負いません。自己責任でお使いください。",
-    back: "公式ファームウェアに戻すには、このページ下の「純正ファームウェアに戻す」か、M-VAVE 公式のアップデーター M-UPGRADE（Downloads → PC Software → M-UPGRADE）を使います。",
-    stockh: "純正ファームウェアに戻す",
-    stockwhy: "M-VAVE の FM-1 V15 を、DWNLO（またはそのセーフモード）から同じ USB ケーブルで書き込みます。DWNLO で保存したパターンは消えることがあります。",
-    keep: "他のファームウェアを入れると、DWNLO のプロジェクトは消えます。先にファイルに保存しておけます:",
-    keeplink: "プロジェクトのバックアップ",
-    stock1: "M-VAVE の FM-1 V15 をダウンロード:",
-    stock2: "ダウンロードしたファイルを選ぶ:",
-    stock3: "FM-1 を USB で接続し、下のボタンを押す。",
-    stockinstall: "純正ファームウェアを書き込む",
-    stockok: "M-VAVE の FM-1 V15 です。ボタンを押してください。",
-    stockbad: "これは M-VAVE の FM-1 V15 のファイルではありません。上のリンクのファイルを選んでください。",
-    stockdone: "完了。FM-1 は純正ファームウェアで起動しました。",
+    back: "公式ファームウェアに戻すには、M-VAVE 公式のアップデーター M-UPGRADE（Downloads → PC Software → M-UPGRADE）を使います。",
     nomidi: "このブラウザでは使えません。Chrome か Edge で開いてください。", loadfail: "読み込めませんでした: ",
     start: "開始します", verify: "確認中", loader: "書き込みモードに切り替え中", write: "書き込み中",
     reboot: "再起動中", done: "完了しました", stopped: "途中で止まりました。USB を挿し直してもう一度押してください。",
@@ -123,18 +103,7 @@ const TEXT = {
     brick: "If the FM-1 no longer starts, a Mac can put the stock firmware back:",
     bricklink: "recovering an FM-1 that won't start (manual)",
     beta: "This is a beta and may be unstable. The author accepts no responsibility if your FM-1 is damaged or misbehaves because of this custom firmware. Use it at your own risk.",
-    back: "To go back to the official firmware, use \"Back to the stock firmware\" below, or M-VAVE's own updater, M-UPGRADE (Downloads → PC Software → M-UPGRADE).",
-    stockh: "Back to the stock firmware",
-    stockwhy: "This writes M-VAVE's own FM-1 V15 back, from DWNLO (or its safe mode, or Felucca) over the same USB cable. Patterns saved in DWNLO may be lost.",
-    keep: "Installing other firmware replaces DWNLO's project. To keep it, save it to a file first:",
-    keeplink: "back up your project",
-    stock1: "Download M-VAVE's FM-1 V15:",
-    stock2: "Choose the file you downloaded:",
-    stock3: "Connect the FM-1 by USB and press the button below.",
-    stockinstall: "Install the stock firmware",
-    stockok: "That is M-VAVE's FM-1 V15. Press the button to install it.",
-    stockbad: "That is not M-VAVE's FM-1 V15 file. Choose the file from the link above.",
-    stockdone: "Done. The FM-1 has restarted with its original firmware.",
+    back: "To go back to the official firmware, use M-VAVE's own updater, M-UPGRADE (Downloads → PC Software → M-UPGRADE).",
     nomidi: "This browser cannot do it. Open the page in Chrome or Edge.", loadfail: "Could not load: ",
     start: "Starting", verify: "Verifying", loader: "Switching to update mode", write: "Writing",
     reboot: "Restarting", done: "Done", stopped: "Stopped. Replug the USB cable and press Install again.",
@@ -167,7 +136,7 @@ $("lang").addEventListener("click", () => { lang = lang === "ja" ? "en" : "ja"; 
 applyLang();
 /* the step in words in a status region (polite), a failure in an alert; progress at most every 2 s or 10 percent */
 const FAILS = new Set(["nomidi", "loadfail", "stopped", "error", "denied", "notfound", "model", "lost", "noloader", "noreturn",
-                       "mismatch", "badpkg", "stockbad"]);
+                       "mismatch", "badpkg"]);
 function show(txt, fail) {
   $(fail ? "status" : "alert").textContent = "";
   $(fail ? "alert" : "status").textContent = txt;
@@ -202,31 +171,12 @@ window.addEventListener("beforeunload", (e) => { if (writing) { e.preventDefault
   } catch (e) { sayK("loadfail", e.message); }
 })();
 
-/* stock firmware: M-VAVE's FM-1 V15, chosen by the user (M-VAVE's server allows no cross-site
-   download) and checked against its SHA-256 before anything is written */
-const STOCK_SHA256 = "db1642b2b6fa5c2cccb11ffd13878068bb28601678d3644049f99dc40e7edb8a";
-let stock = null;
-$("stockfile").addEventListener("change", async (e) => {
-  stock = null;
-  $("stockgo").disabled = true;
-  const f = e.target.files && e.target.files[0];
-  if (!f) return;
-  try {
-    const raw = new Uint8Array(await f.arrayBuffer());
-    const hex = [...new Uint8Array(await crypto.subtle.digest("SHA-256", raw))].map((b) => b.toString(16).padStart(2, "0")).join("");
-    if (hex !== STOCK_SHA256) { sayK("stockbad"); return; }
-    stock = { image: logicalImage(raw), product: productOf(raw) };
-    $("stockgo").disabled = writing;
-    sayK("stockok");
-  } catch (err) { sayK("error", err && err.message); }
-});
-
-async function run(img, product, isStock) {
+async function run(img, product) {
   let midi;
   try { midi = await navigator.requestMIDIAccess({ sysex: true }); }
   catch (e) { sayK("denied"); return; }
   writing = true;
-  $("go").disabled = $("stockgo").disabled = true;
+  $("go").disabled = true;
   try {
     const up = new Updater(midi, log);
     const total = 74 + 1167;
@@ -237,28 +187,25 @@ async function run(img, product, isStock) {
       if (k === "loader") sayK("loader");
       if (k === "write") { $("bar").value = ((74 + a) / total) * 100; sayPct("write", $("bar").value); }
       if (k === "reboot") sayK("reboot");
-      if (k === "done") { $("bar").value = 100; sayK(isStock ? "stockdone" : "done"); }
+      if (k === "done") { $("bar").value = 100; sayK("done"); }
     };
     const ota = await up.find((id) => /^ota-/i.test(id.model));
     if (ota) {
       ota.link.close();
-      sayK((await up.resume(img, step)) ? (isStock ? "stockdone" : "done") : "stopped");
+      sayK((await up.resume(img, step)) ? "done" : "stopped");
     } else {
       await up.install(img, product, step);
     }
   } catch (e) {
-    if (isStock && e && e.code === "mismatch") { $("bar").value = 100; sayK("stockdone"); }   /* stock names itself its own way */
-    else if (e && e.code && TEXT[lang][e.code]) sayK(e.code, e.detail || "");
+    if (e && e.code && TEXT[lang][e.code]) sayK(e.code, e.detail || "");
     else sayK("error", e && e.message);
     log(String(e && e.stack || e));
   }
   writing = false;
   $("go").disabled = !image;
-  $("stockgo").disabled = !stock;
 }
 
-$("go").addEventListener("click", () => run(image, meta.product, false));
-$("stockgo").addEventListener("click", () => { if (stock) run(stock.image, stock.product, true); });
+$("go").addEventListener("click", () => run(image, meta.product));
 </script>
 </body>
 </html>
